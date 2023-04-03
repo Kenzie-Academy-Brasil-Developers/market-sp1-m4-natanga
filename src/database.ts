@@ -1,4 +1,4 @@
-import { Tproducts } from "./interfaces";
+import { ICleaningProduct, IFoodProduct } from "./interfaces";
 
 
-export const products: Array<Tproducts> = []
+export const products: Array<ICleaningProduct | IFoodProduct> = []

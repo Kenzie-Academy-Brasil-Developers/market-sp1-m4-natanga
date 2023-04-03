@@ -1,24 +1,24 @@
 import { Response, Request } from "express";
 import { products } from './database';
-import { IReqProduct, IReqProductOptional, Tproducts } from "./interfaces";
+import { IReqProduct,  ICleaningProduct, IFoodProduct } from "./interfaces";
 
 export const getAllProducts = (req: Request, res: Response): Response => {
 
     let value = 0;
 
-    products.map((product: Tproducts) =>
-        value = value + product.price
+    products.map((product: ICleaningProduct | IFoodProduct) =>
+value = value + product.price
     )
-    const page = {
-        total: value,
-        marketProducts: products,
-    }
-    return res.status(200).json(page)
+const page = {
+    total: value,
+    marketProducts: products,
+}
+return res.status(200).json(page)
 }
 
 export const getProduct = (req: Request, res: Response): Response => {
 
-    const product: Tproducts | undefined = products.find(prod => prod.id === Number(req.params.id))
+    const product: ICleaningProduct | IFoodProduct | undefined = products.find(prod => prod.id === Number(req.params.id))
 
     return res.status(200).json(product)
 }
@@ -40,7 +40,7 @@ export const createdProduct = (req: Request, res: Response): Response => {
         const currentDate = new Date();
         const futureDate = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), currentDate.getDate(), currentDate.getHours(), currentDate.getMilliseconds())
 
-        const newProduct: Tproducts = {
+        const newProduct: ICleaningProduct | IFoodProduct = {
             ...product,
             id: id,
             expirationDate: futureDate,
@@ -63,7 +63,7 @@ export const updateproduct = (req: Request, res: Response): Response => {
 
     const IndexProduct: number | undefined = products.findIndex(product => product.id === Number(req.params.id));
 
-    const updateProduct: Tproducts = {
+    const updateProduct: ICleaningProduct | IFoodProduct = {
         ...products[IndexProduct],
         ...req.body
     }
@@ -78,7 +78,7 @@ export const deleteProduct = (req: Request, res: Response): Response => {
 
     const indexProduct: number | undefined = products.findIndex(product => product.id === Number(req.params.id));
 
-    products.splice(indexProduct,1)
+    products.splice(indexProduct, 1)
 
     return res.status(204).json()
 }
